@@ -33,7 +33,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import android.net.wifi.ScanResult
 import android.util.Log
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.gelitik.wifi.features.home.presentation.HomeScreen
+import com.gelitik.wifi.features.home.presentation.MapScreen
+import com.gelitik.wifi.features.onboarding.presentation.OnboardingScreen
+import com.gelitik.wifi.features.onboarding.presentation.SplashScreen
 import com.gelitik.wifi.features.wifi.presentation.screen.WifiScannerScreen
+import com.gelitik.wifi.presentation.theme.PrimaryBlack
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,11 +50,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Wifi_positionngTheme {
+                val navController = rememberNavController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = PrimaryBlack
                 ) {
-                    WifiScannerScreen()
+                    NavHost(navController = navController, startDestination = "splash") {
+                        composable("splash") {
+                            SplashScreen(navController=navController)
+                        }
+                        composable("onboarding") {
+                            OnboardingScreen(navController = navController)
+                        }
+                        composable("home") {
+                            HomeScreen(navController = navController)
+                        }
+                        composable("map") {
+                            MapScreen()
+                        }
+                    }
                 }
             }
         }
